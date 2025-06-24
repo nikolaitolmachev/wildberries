@@ -1,14 +1,18 @@
 #!/bin/bash
 
-echo "Starting backend..."
-cd backend || { echo "Backend folder not found"; exit 1; }
+echo "Activating virtual environment..."
+if [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "win32" ]]; then
+  source venv/Scripts/activate
+else
+  source venv/bin/activate
+fi
 
-uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload &
+echo "Starting backend..."
+uvicorn backend.app.main:app --host 127.0.0.1 --port 8000 --reload &
 BACKEND_PID=$!
 
-cd ../frontend || { echo "Frontend folder not found"; exit 1; }
-
 echo "Starting frontend..."
+cd frontend || { echo "Frontend folder not found"; exit 1; }
 npm start &
 FRONTEND_PID=$!
 

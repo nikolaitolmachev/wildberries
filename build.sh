@@ -4,13 +4,6 @@ set -e
 
 echo "=== Building backend ==="
 
-if [ ! -d "backend" ]; then
-  echo "Error: Backend folder not found"
-  exit 1
-fi
-
-cd backend
-
 if ! command -v python3 &> /dev/null && ! command -v python &> /dev/null; then
   echo "Error: Python is not installed or not in PATH"
   exit 1
@@ -22,13 +15,21 @@ else
   PYTHON_CMD=python
 fi
 
+activate_venv() {
+  if [[ "$OSTYPE" == "msys" ]] || [[ "$OSTYPE" == "win32" ]]; then
+    source venv/Scripts/activate
+  else
+    source venv/bin/activate
+  fi
+}
+
 if [ -d "venv" ]; then
   echo "Activating existing virtual environment..."
-  source venv/bin/activate
+  activate_venv
 else
   echo "Virtual environment not found, creating..."
   $PYTHON_CMD -m venv venv
-  source venv/bin/activate
+  activate_venv
 fi
 
 if [ -f "requirements.txt" ]; then
@@ -38,8 +39,6 @@ if [ -f "requirements.txt" ]; then
 else
   echo "Warning: requirements.txt not found, skipping backend dependencies installation"
 fi
-
-cd ..
 
 echo "=== Building frontend ==="
 
