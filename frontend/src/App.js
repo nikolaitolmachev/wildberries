@@ -211,7 +211,7 @@ function App() {
         <TableBody>
           {products.map((p) => (
             <TableRow key={p.id}>
-              <TableCell>{p.name}</TableCell>
+              <TableCell> <a href={`https://www.wildberries.ru/catalog/${p.id_wb}/detail.aspx/`}>{p.name}</a></TableCell>
               <TableCell>{p.price_with_discount}</TableCell>
               <TableCell>{p.price_basic}</TableCell>
               <TableCell>{p.rating}</TableCell>
