@@ -41,11 +41,17 @@ class WBParser:
             sizes = product.get("sizes", [{}])[0]
             price = sizes.get("price", {})
 
+            basic_price = int(price.get('basic'))
+            total_price = int(price.get('total'))
+
+            price_basic = basic_price / 100 if isinstance(basic_price, (int, float)) else None
+            price_with_discount = total_price / 100 if isinstance(total_price, (int, float)) else None
+
             result.append({
                 'id': product.get('id'),
                 'name': product.get('name'),
-                'price_basic': price.get('basic'),
-                'price_with_discount': price.get('total'),
+                'price_basic': price_basic,
+                'price_with_discount': price_with_discount,
                 'rating': product.get('reviewRating'),
                 'feedbacks': product.get('feedbacks'),
             })
@@ -62,7 +68,7 @@ class WBParser:
             params = {
                 'ab_testing': 'false',
                 'appType': '1',
-                'curr': 'byn',
+                'curr': 'rub',
                 'dest': '-59202',
                 'hide_dtype': '10;13;14',
                 'lang': 'ru',
